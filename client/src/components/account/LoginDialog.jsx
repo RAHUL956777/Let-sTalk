@@ -47,21 +47,48 @@ const Container = styled(Box)`
   padding: 56px 0 56px 56px;
 `;
 
+const BottomPart = styled(Box)`
+  & > p {
+    display: inline;
+    margin-left: 48%;
+    margin-bottom: 2%;
+    font-size: 30px;
+    font-weight: 200;
+    color: #525252;
+  }
+  & > a {
+    color: #00bfb6;
+    font-size: 15px;
+    margin-left: 45%;
+  }
+  & > video {
+    margin-top: 5%;
+    margin-left: 21%;
+    padding-bottom: 25px;
+  }
+
+  background-color: #f3f9ff;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+`;
+
 const dialogStyle = {
-  height: "96%",
-  marginTop: "12%",
-  width: "60%",
+  height: "86vh",
+  marginTop: "8%",
+  marginBottom: "5%",
+  width: "65%",
   maxWidth: "100%",
   maximumHeight: "100%",
   boxShadow: "none",
-  overFlow: "hidden",
+  overflow: "auto",
 };
 
 const LoginDialog = () => {
   const onLoginSuccess = (res) => {
-    console.log("Login successfull");
     const decoded = jwt_decode(res.credential);
-    console.log(decoded);
+    console.log("Login successfull", decoded);
   };
 
   const onLoginError = (res) => {
@@ -69,7 +96,7 @@ const LoginDialog = () => {
   };
 
   return (
-    <Dialog open={true} PaperProps={{ sx: dialogStyle }}>
+    <Dialog open={true} PaperProps={{ sx: dialogStyle }} hideBackdrop={true}>
       <Component>
         <Container>
           <Title>Use WhatsApp on your computer: </Title>
@@ -103,6 +130,19 @@ const LoginDialog = () => {
           </Box>
         </Box>
       </Component>
+      {/* bottom part */}
+      <BottomPart>
+        <p>Tutorial</p>
+        <a href="https://faq.whatsapp.com/1317564962315842/?cms_platform=web&lang=en">
+          Need help to get started?
+        </a>
+        <video
+          src="./video/whatsapp.mp4"
+          controls
+          height="70%"
+          width="60%"
+        ></video>
+      </BottomPart>
     </Dialog>
   );
 };
