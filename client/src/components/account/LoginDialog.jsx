@@ -3,7 +3,8 @@ import React from "react";
 import { qrCodeImage } from "../../components/constants/data";
 import SettingsSuggestTwoToneIcon from "@mui/icons-material/SettingsSuggestTwoTone";
 import { GoogleLogin } from "@react-oauth/google";
-import MoreVertIcon from '@mui/icons-material/MoreVert';
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import jwt_decode from "jwt-decode";
 
 const Component = styled(Box)`
   display: flex;
@@ -57,12 +58,14 @@ const dialogStyle = {
 };
 
 const LoginDialog = () => {
-  const onLoginSuccess = () => {
+  const onLoginSuccess = (res) => {
     console.log("Login successfull");
+    const decoded = jwt_decode(res.credential);
+    console.log(decoded);
   };
 
-  const onLoginError = () => {
-    console.log("You get some error while login");
+  const onLoginError = (res) => {
+    console.log("You get some error while login", res);
   };
 
   return (
@@ -73,12 +76,15 @@ const LoginDialog = () => {
           <StyledList>
             <ListItem>1. Open WhatsApp on your phone</ListItem>
             <ListItem>
-              2. Tap <Type>Menu</Type> <MoreVertIcon/> or <Type> Setting </Type>
-                <SettingsSuggestTwoToneIcon />
+              2. Tap <Type>Menu</Type> <MoreVertIcon /> or{" "}
+              <Type> Setting </Type>
+              <SettingsSuggestTwoToneIcon />
               <Type>and</Type> select
               <Type>Linked Devices</Type>
             </ListItem>
-            <ListItem>3. Tap on <Type>Link a device</Type></ListItem>
+            <ListItem>
+              3. Tap on <Type>Link a device</Type>
+            </ListItem>
             <ListItem>
               4. Point your phone to this screen to capture the QR code
             </ListItem>
