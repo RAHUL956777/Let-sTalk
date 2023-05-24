@@ -1,10 +1,11 @@
+import React, { useContext } from "react";
 import { Dialog, Box, Typography, List, ListItem, styled } from "@mui/material";
-import React from "react";
 import { qrCodeImage } from "../../components/constants/data";
 import SettingsSuggestTwoToneIcon from "@mui/icons-material/SettingsSuggestTwoTone";
 import { GoogleLogin } from "@react-oauth/google";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import jwt_decode from "jwt-decode";
+import { AccountContext } from "../../context/AccountProvider";
 
 const Component = styled(Box)`
   display: flex;
@@ -86,9 +87,12 @@ const dialogStyle = {
 };
 
 const LoginDialog = () => {
+  const { setAccount } = useContext(AccountContext);
+
   const onLoginSuccess = (res) => {
     const decoded = jwt_decode(res.credential);
     console.log("Login successfull", decoded);
+    setAccount(decoded);
   };
 
   const onLoginError = (res) => {
