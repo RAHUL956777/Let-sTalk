@@ -83,7 +83,7 @@ const dialogStyle = {
   maxWidth: "100%",
   maximumHeight: "100%",
   boxShadow: "none",
-  overflow: "auto",
+  overflow: "scroll",
 };
 
 const LoginDialog = () => {
