@@ -1,10 +1,11 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { AccountContext } from "../../../context/AccountProvider";
 import { Box, styled } from "@mui/material";
 import ChatIcon from "@mui/icons-material/Chat";
 import HistoryToggleOffIcon from "@mui/icons-material/HistoryToggleOff";
 
 import HeaderMenu from "./HeaderMenu";
+import Infodrawer from "../../drawer/Infodrawer";
 
 const Component = styled(Box)`
   height: 44px;
@@ -21,9 +22,10 @@ const Wrapper = styled(Box)`
     margin-left: 2px;
     padding: 10px;
     color: #000;
+    cursor: pointer;
   }
 
-  & :first-child {
+  & :rst-of-type {
     font-size: 25px;
     margin-right: 8px;
     margin-top: 3px;
@@ -34,29 +36,34 @@ const Wrapper = styled(Box)`
     margin-right: 8px;
     margin-top: 3px;
   }
-
-
 `;
 
 const Image = styled("img")({
   height: 40,
   width: 40,
   borderRadius: "80%",
+  cursor: 'pointer',
 });
 
 const Header = () => {
   const { account } = useContext(AccountContext);
+  const [openDrawer, setOpenDrawre] = useState(false);
+
+  const toggleDrawer = () => {
+    setOpenDrawre(true);
+  };
 
   return (
     <>
       <Component Component>
-        <Image src={account.picture} alt="Picture" />
+        <Image src={account.picture} alt="dp" onClick={() => toggleDrawer()} />
         <Wrapper>
           <HistoryToggleOffIcon />
           <ChatIcon />
           <HeaderMenu />
         </Wrapper>
       </Component>
+      <Infodrawer open={openDrawer} setOpen={setOpenDrawre} />
     </>
   );
 };
