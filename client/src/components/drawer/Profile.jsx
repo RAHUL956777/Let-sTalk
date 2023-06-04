@@ -16,20 +16,21 @@ const Image = styled("img")({
 });
 
 const BoxWrapper = styled(Box)`
-  background: #FFFFFF;
+  background: #ffffff;
   padding: 12px 30px 2px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+`;
 
-  &:first-item {
-    font-size: 13px;
-    color: #009688;
-    font-weight: 200;
-  }
+const StyledTypography1 = styled(Typography)`
+  font-size: 13px;
+  color: #009688;
+  font-weight: 200;
+`;
 
-  &:last-child {
-    margin: 14px 0;
-    color: #4a4a4a;
-  }
+const StyledTypography2 = styled(Typography)`
+  font-size: 16px;
+  color: #4a4a4a;
+  font-weight: 400;
 `;
 
 const DescriptionContainer = styled(Box)`
@@ -51,8 +52,8 @@ const Profile = () => {
       </ImageContainer>
 
       <BoxWrapper>
-        <Typography>Your name</Typography>
-        <Typography>{account.name}</Typography>
+        <StyledTypography1>Your name</StyledTypography1>
+        <StyledTypography2>{account.name}</StyledTypography2>
       </BoxWrapper>
 
       <DescriptionContainer>
@@ -63,8 +64,8 @@ const Profile = () => {
       </DescriptionContainer>
 
       <BoxWrapper>
-        <Typography>About</Typography>
-        <Typography>Eat! Sleep! Code! Repeat!</Typography>
+        <StyledTypography1>About</StyledTypography1>
+        <StyledTypography2>Eat! Sleep! Code! Repeat! 👈✌️</StyledTypography2>
       </BoxWrapper>
     </>
   );

@@ -60,7 +60,7 @@ const Header = () => {
         <Wrapper>
           <HistoryToggleOffIcon />
           <ChatIcon />
-          <HeaderMenu />
+          <HeaderMenu  setOpenDrawre={setOpenDrawre}/>
         </Wrapper>
       </Component>
       <Infodrawer open={openDrawer} setOpen={setOpenDrawre} />
