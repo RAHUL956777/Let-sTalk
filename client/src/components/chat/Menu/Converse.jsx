@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Box, Typography, styled } from "@mui/material";
+import { AccountContext } from "../../../context/AccountProvider";
 
 const Component = styled(Box)`
   display: flex;
@@ -17,8 +18,14 @@ const Image = styled("img")({
 });
 
 const Converse = ({ user }) => {
+  const { setPerson } = useContext(AccountContext);
+
+  const getUser = () => {
+    setPerson(user);
+  };
+
   return (
-    <Component>
+    <Component onClick={() => getUser()}>
       <Box>
         <Image src={user.picture} alt="image" />
       </Box>
