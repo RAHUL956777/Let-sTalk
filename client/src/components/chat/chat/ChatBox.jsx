@@ -8,7 +8,7 @@ const ChatBox = () => {
   const { person } = useContext(AccountContext);
 
   return (
-    <Box>
+    <Box style={{height:'75%'}}>
       <ChatHeader person={person}/>
       <Messages person={person}/>
     </Box>

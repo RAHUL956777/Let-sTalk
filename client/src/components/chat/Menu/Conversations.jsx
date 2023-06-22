@@ -15,7 +15,7 @@ const StyleDivider = styled(Divider)`
   opacity: 0.6;
 `;
 
-const Conversations = () => {
+const Conversations = ({ text }) => {
   const [users, setUsers] = useState([]);
 
   const { account } = useContext(AccountContext);
@@ -23,10 +23,13 @@ const Conversations = () => {
   useEffect(() => {
     const fecthData = async () => {
       let responce = await getUsers();
-      setUsers(responce);
+      const filtreedData = responce.filter((user) =>
+        user.namae.toLowerCase().includes(text.toLowerCase())
+      );
+      setUsers(filtreedData);
     };
     fecthData();
-  }, []);
+  }, [text]);
 
   return (
     <Component>

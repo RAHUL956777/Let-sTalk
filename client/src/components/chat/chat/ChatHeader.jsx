@@ -38,13 +38,13 @@ const RightContainer = styled(Box)`
   }
 `;
 
-const ChatHeader = () => {
+const ChatHeader = ({person}) => {
   return (
     <Header>
-      <Image src={defaultProfilePicture} alt="dp" />
+      <Image src={person.picture} alt="dp" />
       <Box>
-        <Name>Name</Name>
-        <Status>Online Status</Status>
+        <Name>{person.name}</Name>
+        <Status>Offline</Status>
       </Box>
       <RightContainer>
         <SearchIcon />
