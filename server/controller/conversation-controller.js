@@ -3,15 +3,15 @@ import Conversation from "../models/Conversation.js";
 export const newConversation = async (req, res) => {
   try {
     const senderId = req.body.senderId;
-    const reciverId = req.body.reciverId;
-    const exist = await conversation.findOne({
-      members: { $all: [reciverId, senderId] },
+    const receiverId = req.body.receiverId;
+    const exist = await Conversation.findOne({
+      members: { $all: [receiverId, senderId] },
     });
     if (exist) {
       return res.status(200).json("Conversation already exists");
     }
     const newConversation = new Conversation({
-      members: [senderId, reciverId],
+      members: [senderId, receiverId],
     });
     await newConversation.save();
     return res.status(200).json("Conversation saved successfully");

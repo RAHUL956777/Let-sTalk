@@ -34,7 +34,7 @@ const InputField = styled(InputBase)`
   height: 15px;
 `;
 
-const Search = (setText) => {
+const Search = ({setText}) => {
   return (
     <Component>
       <Wrapper>

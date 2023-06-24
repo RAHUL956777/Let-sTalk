@@ -19,11 +19,12 @@ const Image = styled("img")({
 });
 
 const Converse = ({ user }) => {
+
   const { setPerson,account } = useContext(AccountContext);
 
   const getUser = async() => {
     setPerson(user);
-    await setConversation({senderId:account.sub, reaciverId:user.sub});
+    await setConversation({senderId:account.sub, receiverId:user.sub});
   };
 
   return (

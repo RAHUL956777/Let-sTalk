@@ -22,11 +22,11 @@ const Conversations = ({ text }) => {
 
   useEffect(() => {
     const fecthData = async () => {
-      let responce = await getUsers();
-      const filtreedData = responce.filter((user) =>
+      const responce = await getUsers();
+      const filtredData = responce.filter((user) =>
         user.namae.toLowerCase().includes(text.toLowerCase())
       );
-      setUsers(filtreedData);
+      setUsers(filtredData);
     };
     fecthData();
   }, [text]);
