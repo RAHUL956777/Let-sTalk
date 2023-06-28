@@ -22,9 +22,9 @@ const Conversations = ({ text }) => {
 
   useEffect(() => {
     const fecthData = async () => {
-      const responce = await getUsers();
-      const filtredData = responce.filter((user) =>
-        user.namae.toLowerCase().includes(text.toLowerCase())
+      const response = await getUsers();
+      const filtredData = response.filter((user) =>
+        user.name.toLowerCase().includes(text.toLowerCase())
       );
       setUsers(filtredData);
     };
