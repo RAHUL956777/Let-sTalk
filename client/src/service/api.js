@@ -36,3 +36,11 @@ export const getConversation = async (data) => {
     console.log("Error while calling getConversation api", error.message);
   }
 };
+
+export const newMessage = async (data) => {
+  try {
+    await axios.post(`${url}/message/add`, data);
+  } catch (error) {
+    console.log("Error while getting newMessage api", error.message);
+  }
+};
