@@ -34,7 +34,7 @@ const ClipIcon = styled(AttachFileIcon)`
   transform: rotate(40deg);
 `;
 
-const Footer = ({ sendText,setValue }) => {
+const Footer = ({value, sendText,setValue }) => {
 
   return (
     <Container>
@@ -45,6 +45,7 @@ const Footer = ({ sendText,setValue }) => {
           placeholder="Type a message"
           onChange={(e) => setValue(e.target.value)}
           onKeyPress={(e) => sendText(e)}
+          value={value}
         />
       </Search>
       <MicIcon />

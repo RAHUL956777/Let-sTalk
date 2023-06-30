@@ -44,3 +44,12 @@ export const newMessage = async (data) => {
     console.log("Error while getting newMessage api", error.message);
   }
 };
+
+export const getMessages = async (id) => {
+  try {
+    let responce = await axios.get(`${url}/message/get/${id}`);
+    return responce.data;
+  } catch (error) {
+    console.log("Error while getting getMessage api", error.message);
+  }
+};
