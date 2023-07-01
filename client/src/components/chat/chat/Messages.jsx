@@ -21,20 +21,19 @@ const Messages = ({ person, conversation }) => {
 
   useEffect(() => {
     const getMessageDetails = async () => {
-      let data = await getMessages( conversation?._id);
+      let data = await getMessages(conversation._id);
       console.log(data);
     };
     getMessageDetails();
-  }, [ conversation._id]);
+  }, [conversation._id]);
 
   const sendText = async (e) => {
     const code = e.keyCode || e.which;
-
     if (code === 13) {
       let message = {
         senderId: account.sub,
         reciverId: person.sub,
-        conversationId: conversation && conversation._id,
+        conversationId: conversation._id,
         type: "text",
         text: value,
       };
