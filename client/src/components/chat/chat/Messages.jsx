@@ -16,29 +16,33 @@ const Component = styled(Box)`
 
 const Messages = ({ person, conversation }) => {
   const [value, setValue] = useState("");
-
   const { account } = useContext(AccountContext);
 
   useEffect(() => {
     const getMessageDetails = async () => {
-      let data = await getMessages(conversation._id);
-      console.log(data);
+      if (conversation && conversation._id) {
+        let data = await getMessages(conversation._id);
+        console.log(data);
+      }
     };
     getMessageDetails();
-  }, [conversation._id]);
+  }, [conversation]);
 
   const sendText = async (e) => {
     const code = e.keyCode || e.which;
     if (code === 13) {
-      let message = {
-        senderId: account.sub,
-        reciverId: person.sub,
-        conversationId: conversation._id,
-        type: "text",
-        text: value,
-      };
-      await newMessage(message);
-      setValue("");
+      if (conversation && conversation._id) {
+        let message = {
+          senderId: account.sub,
+          reciverId: person.sub,
+          conversationId: conversation._id,
+          type: "text",
+          text: value,
+        };
+        
+        await newMessage(message);
+        setValue("");
+      }
     }
   };
 

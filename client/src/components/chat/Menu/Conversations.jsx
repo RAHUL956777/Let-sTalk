@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { getUsers } from "../../../service/api";
 import { Box, styled, Divider } from "@mui/material";
 import Converse from "./Converse";
@@ -17,18 +17,17 @@ const StyleDivider = styled(Divider)`
 
 const Conversations = ({ text }) => {
   const [users, setUsers] = useState([]);
-
   const { account } = useContext(AccountContext);
 
   useEffect(() => {
-    const fecthData = async () => {
+    const fetchData = async () => {
       const response = await getUsers();
-      const filtredData = response.filter((user) =>
+      const filteredData = response.filter((user) =>
         user.name.toLowerCase().includes(text.toLowerCase())
       );
-      setUsers(filtredData);
+      setUsers(filteredData);
     };
-    fecthData();
+    fetchData();
   }, [text]);
 
   return (
@@ -36,10 +35,10 @@ const Conversations = ({ text }) => {
       {users.map((user) => {
         return (
           user.sub !== account.sub && (
-            <>
+            <React.Fragment key={user.id}>
               <Converse user={user} />
               <StyleDivider />
-            </>
+            </React.Fragment>
           )
         );
       })}

@@ -6,14 +6,13 @@ import HistoryToggleOffIcon from "@mui/icons-material/HistoryToggleOff";
 
 import HeaderMenu from "./HeaderMenu";
 import Infodrawer from "../../drawer/Infodrawer";
-
-const Component = styled(Box)`
+const ComponentBox = styled(Box)`
   height: 44px;
   background: #ededed;
   padding: 8px 16px;
   display: flex;
   flex-direction: row;
-  align-item: center;
+  align-items: center;
 `;
 
 const Wrapper = styled(Box)`
@@ -25,13 +24,13 @@ const Wrapper = styled(Box)`
     cursor: pointer;
   }
 
-  & :rst-of-type {
+  & :first-of-type {
     font-size: 25px;
     margin-right: 8px;
     margin-top: 3px;
   }
 
-  & :second-child {
+  & :nth-of-type(2) {
     font-size: 23px;
     margin-right: 8px;
     margin-top: 3px;
@@ -42,28 +41,28 @@ const Image = styled("img")({
   height: 40,
   width: 40,
   borderRadius: "80%",
-  cursor: 'pointer',
+  cursor: "pointer",
 });
 
 const Header = () => {
   const { account } = useContext(AccountContext);
-  const [openDrawer, setOpenDrawre] = useState(false);
+  const [openDrawer, setOpenDrawer] = useState(false);
 
   const toggleDrawer = () => {
-    setOpenDrawre(true);
+    setOpenDrawer(true);
   };
 
   return (
     <>
-      <Component Component>
+      <ComponentBox component="div">
         <Image src={account.picture} alt="dp" onClick={() => toggleDrawer()} />
         <Wrapper>
           <HistoryToggleOffIcon />
           <ChatIcon />
-          <HeaderMenu  setOpenDrawre={setOpenDrawre}/>
+          <HeaderMenu setOpenDrawer={setOpenDrawer} />
         </Wrapper>
-      </Component>
-      <Infodrawer open={openDrawer} setOpen={setOpenDrawre} />
+      </ComponentBox>
+      <Infodrawer open={openDrawer} setOpen={setOpenDrawer} />
     </>
   );
 };

@@ -10,26 +10,25 @@ const MenuOption = styled(MenuItem)`
   color: #4a4a4a;
 `;
 
-const HeaderMenu = ({ setOpenDrawre }) => {
-  const [open, setOpen] = useState(null);
+const HeaderMenu = ({ setOpenDrawer }) => {
+  const [anchorEl, setAnchorEl] = useState(null);
 
   const handleClose = () => {
-    setOpen(null);
+    setAnchorEl(null);
   };
 
-  const handleClick = (e) => {
-    setOpen(e.currentTarget);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
   };
 
   return (
     <>
       <MoreVertIcon onClick={handleClick} style={{ cursor: "pointer" }} />
       <Menu
-        anchorEl={open}
+        anchorEl={anchorEl}
         keepMounted
-        open={open}
+        open={Boolean(anchorEl)}
         onClose={handleClose}
-        getContentAnchoreE1={null}
         anchorOrigin={{
           vertical: "bottom",
           horizontal: "center",
@@ -42,7 +41,7 @@ const HeaderMenu = ({ setOpenDrawre }) => {
         <MenuOption
           onClick={() => {
             handleClose();
-            setOpenDrawre(true);
+            setOpenDrawer(true);
           }}
         >
           Profile
