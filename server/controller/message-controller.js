@@ -6,11 +6,12 @@ export const newMessage = async (req, res) => {
     const newMessage = new Message(req.body);
 
     await newMessage.save();
+
     await Conversation.findByIdAndUpdate(req.body.conversationId, {
-      Message: req.body.text,
+      $push: { messages: req.body.text },
     });
 
-    return res.status(200).json("Message has been send sucessfully");
+    return res.status(200).json("Message has been sent successfully");
   } catch (error) {
     return res.status(500).json("Error while sending message", error.Message);
   }
@@ -19,8 +20,9 @@ export const newMessage = async (req, res) => {
 export const getMessages = async (req, res) => {
   try {
     const messages = await Message.find({ conversationId: req.params.id });
-    return res.status(200).json(messages);
+    res.status(200).json(messages);
   } catch (error) {
-    return res.status(500).json(error.Message);
+    console.log("Error while getting getMessage api", error.message);
+    res.status(500).json(error.message);
   }
 };
