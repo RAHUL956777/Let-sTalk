@@ -7,7 +7,6 @@ import { getConversation } from "../../../service/api";
 
 const ChatBox = () => {
   const { person, account } = useContext(AccountContext);
-
   const [conversation, setConversation] = useState({});
 
   useEffect(() => {
@@ -16,10 +15,11 @@ const ChatBox = () => {
         senderId: account.sub,
         reciverId: person.sub,
       });
-      setConversation(data);
+      setConversation(data)
     };
     getConversationDetails();
-  }, [person.sub, account.sub]);
+ 
+  }, [person.sub,account.sub]);
 
   return (
     <Box style={{ height: "75%" }}>

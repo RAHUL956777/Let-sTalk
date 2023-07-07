@@ -6,7 +6,6 @@ import { getMessages, newMessage } from "../../../service/api";
 
 const Wrapper = styled(Box)`
   background-image: url(${"https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png"});
-  background-size: ;
 `;
 
 const Component = styled(Box)`
@@ -15,8 +14,10 @@ const Component = styled(Box)`
 `;
 
 const Messages = ({ person, conversation }) => {
+
   const [value, setValue] = useState("");
   const { account } = useContext(AccountContext);
+
   useEffect(() => {
     const getMessageDetails = async () => {
       if (conversation && conversation._id) {
@@ -26,7 +27,6 @@ const Messages = ({ person, conversation }) => {
     };
     getMessageDetails();
   }, [conversation]);
-  
 
   const sendText = async (e) => {
     const code = e.keyCode || e.which;
@@ -38,7 +38,6 @@ const Messages = ({ person, conversation }) => {
         type: "text",
         text: value,
       };
-      
       await newMessage(message);
       setValue("");
     }

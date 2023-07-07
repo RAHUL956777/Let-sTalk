@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import { getUsers } from "../../../service/api";
 import { Box, styled, Divider } from "@mui/material";
-import Converse from "./Converse";
+import Converse from "./Conversation";
 import { AccountContext } from "../../../context/AccountProvider";
 
 const Component = styled(Box)`

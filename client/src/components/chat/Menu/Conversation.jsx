@@ -18,7 +18,7 @@ const Image = styled("img")({
   objectFit: "cover",
 });
 
-const Converse = ({ user }) => {
+const Conversation = ({ user }) => {
 
   const { setPerson,account } = useContext(AccountContext);
 
@@ -41,4 +41,4 @@ const Converse = ({ user }) => {
   );
 };
 
-export default Converse;
+export default Conversation;
