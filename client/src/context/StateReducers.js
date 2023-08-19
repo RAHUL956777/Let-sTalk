@@ -7,11 +7,13 @@ export const initialState = {
 
 const reducer = (state, action) => {
   switch (action.type) {
-    case reducerCases.SET_USER_INFO:
+    case reducerCases.SET_USER_INFO: {
+      //   console.log({ userInfo: action.userInfo });
       return {
         ...state,
-        unserInfo: action.userInfo,
+        userInfo: action.userInfo,
       };
+    }
     case reducerCases.SET_NEW_USER:
       return {
         ...state,
