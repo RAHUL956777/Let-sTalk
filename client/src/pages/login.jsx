@@ -5,8 +5,16 @@ import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { firebaseAuth } from "@/utils/FirebaseConfig";
 import { CHECK_USER_ROUTE } from "@/utils/ApiRoutes";
 import axios from "axios";
+import { useRouter } from "next/router";
+import { useStateProvider } from "@/context/StateContext";
+import { reducerCases } from "@/context/constants";
+import reducer from "@/context/StateReducers";
 
 function login() {
+  const router = useRouter();
+
+  const [{}, dispatch] = useStateProvider();
+
   const handleLogin = async () => {
     const provider = new GoogleAuthProvider();
     const {
@@ -16,7 +24,20 @@ function login() {
     try {
       if (email) {
         const { data } = await axios.post(CHECK_USER_ROUTE, { email });
-        console.log({ data });
+
+        if (!data.status) {
+          dispatch({ type: reducerCases.SET_NEW_USER, newUser: true });
+          dispatch({
+            type: reducerCases.SET_USER_INFO,
+            userInfo: {
+              name,
+              email,
+              profileImage,
+              status: "Avaliable",
+            },
+          });
+          router.push("/onboarding");
+        }
       }
     } catch (error) {
       console.log(`error while checking email`, error);
