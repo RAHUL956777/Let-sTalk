@@ -1,7 +1,8 @@
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaCamera } from "react-icons/fa";
 import ContextMenu from "./ContextMenu";
+import PhotoPicker from "./PhotoPicker";
 
 function Avatar({ type, image, setImage }) {
   const [hover, setHover] = useState(false);
@@ -11,18 +12,42 @@ function Avatar({ type, image, setImage }) {
     y: 0,
   });
 
+  const [grabPhoto, setGrabPhoto] = useState(false);
+
   const showContextMenu = (e) => {
     e.preventDefault();
     setIsContextMenuVisible(true);
     setContextMenuCordinates({ x: e.pageX, y: e.pageY });
   };
 
+  useEffect(() => {
+    if (grabPhoto) {
+      const data = document.getElementById("photo-picker-element");
+      data.click();
+      document.body.onfocus = (e) => {
+        setGrabPhoto(false);
+      };
+    }
+  }, [grabPhoto]);
+
   const contextMenuOptions = [
     { name: "Take Photo", callback: () => {} },
     { name: "Choose From Libary", callback: () => {} },
-    { name: "Upload Photo", callback: () => {} },
-    { name: "Remove Photo", callback: () => {} },
+    {
+      name: "Upload Photo",
+      callback: () => {
+        setGrabPhoto(true);
+      },
+    },
+    {
+      name: "Remove Photo",
+      callback: () => {
+        setImage("/default_avatar.png");
+      },
+    },
   ];
+
+  const photoPickerChange = () => {};
 
   return (
     <>
@@ -73,6 +98,7 @@ function Avatar({ type, image, setImage }) {
           setContextMenu={setIsContextMenuVisible}
         />
       )}
+      {grabPhoto && <PhotoPicker onChange={photoPickerChange} />}
     </>
   );
 }
