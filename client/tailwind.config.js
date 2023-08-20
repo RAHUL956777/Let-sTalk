@@ -17,6 +17,7 @@ module.exports = {
         "panel-header-background": "#202c33",
         "panel-header-icon": "#aebac1",
         "icon-lighter": "#8696a0",
+        "background-default": "#202c33",
         "icon-green": "#00a884",
         "search-input-container-background": "#111b21",
         "conversation-border": "rgba(134,150,160,0.15)",
