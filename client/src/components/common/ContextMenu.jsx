@@ -15,9 +15,9 @@ function ContextMenu({ options, cordinates, contextMenu, setContextMenu }) {
       }
     };
     document.addEventListener("click", handleOutsideClick);
-    return()=>{
-      document.removeEventListener("click",handleOutsideClick)
-    }
+    return () => {
+      document.removeEventListener("click", handleOutsideClick);
+    };
   });
 
   const handleClick = (e, callback) => {
