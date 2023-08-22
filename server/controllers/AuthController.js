@@ -17,3 +17,15 @@ export const checkUser = async (req, res, next) => {
     next(error);
   }
 };
+
+export const onBoardUser = async (req, res, next) => {
+  try {
+    const { email, name, about, image: profilePicture } = req.body;
+    if (!email || !about || !profilePicture) {
+      return res.send("Email, Name and Image are required.");
+    }
+    const prisma = getPrismaInstance();
+  } catch (error) {
+    next(error);
+  }
+};

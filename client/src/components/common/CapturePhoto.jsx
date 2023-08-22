@@ -28,20 +28,19 @@ function CapturePhoto({ hide, setImage }) {
     setImage(canvas.toDataURL("image/jpeg"));
     hide(false);
 
-    if (cameraActive) {
-      const stream = videoRef.current.srcObject;
-      if (stream) {
-        stream.getTracks().forEach((track) => track.stop());
-        setCameraActive(false);
-      }
+    const stream = videoRef.current.srcObject;
+    if (stream) {
+      stream.getTracks().forEach((track) => track.stop());
+      setCameraActive(false);
     }
+    hide(false);
   };
 
   return (
     <div className="absolute h-4/6 w-2/6  top-1/4 left-1/3 bg-gray-900 gap-3 rounded-lg pt-2 flex items-center justify-center">
       <div className="flex flex-col gap-4 w-full items-center justify-center">
         <div
-          onClick={() => (hide(false), capturePhoto())}
+          onClick={() => (capturePhoto(), hide(false))}
           className="p-1 flex items-end justify-end"
         >
           <IoClose className="h-10 w-10 cursor-pointer" />
