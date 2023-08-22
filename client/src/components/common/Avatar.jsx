@@ -4,6 +4,7 @@ import { FaCamera } from "react-icons/fa";
 import ContextMenu from "./ContextMenu";
 import PhotoPicker from "./PhotoPicker";
 import PhotoLibrary from "./PhotoLibrary";
+import CapturePhoto from "./CapturePhoto";
 
 function Avatar({ type, image, setImage }) {
   const [hover, setHover] = useState(false);
@@ -15,6 +16,7 @@ function Avatar({ type, image, setImage }) {
 
   const [grabPhoto, setGrabPhoto] = useState(false);
   const [showPhotoLibary, setShowPhotoLibary] = useState(false);
+  const [showCapturePhoto, setShowCapturePhoto] = useState(false);
 
   const showContextMenu = (e) => {
     e.preventDefault();
@@ -35,7 +37,12 @@ function Avatar({ type, image, setImage }) {
   }, [grabPhoto]);
 
   const contextMenuOptions = [
-    { name: "Take Photo", callback: () => {} },
+    {
+      name: "Take Photo",
+      callback: () => {
+        setShowCapturePhoto(true);
+      },
+    },
     {
       name: "Choose From Libary",
       callback: () => {
@@ -66,7 +73,6 @@ function Avatar({ type, image, setImage }) {
     };
     reader.readAsDataURL(file);
     setTimeout(() => {
-      console.log(data.src);
       setImage(data.src);
     }, 100);
   };
@@ -120,7 +126,15 @@ function Avatar({ type, image, setImage }) {
           setContextMenu={setIsContextMenuVisible}
         />
       )}
-      {showPhotoLibary && <PhotoLibrary setImage={setImage} hidePhotoLibary={setShowPhotoLibary} />}
+      {showCapturePhoto && (
+        <CapturePhoto setImage={setImage} hide={setShowCapturePhoto} />
+      )}
+      {showPhotoLibary && (
+        <PhotoLibrary
+          setImage={setImage}
+          hidePhotoLibary={setShowPhotoLibary}
+        />
+      )}
       {grabPhoto && <PhotoPicker onChange={photoPickerChange} />}
     </>
   );
