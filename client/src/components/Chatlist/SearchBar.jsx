@@ -7,7 +7,7 @@ function SearchBar() {
     <div className="bg-search-input-container-background flex py-3 p-2 items-center gap-3 h-14">
       <div className="bg-panel-header-background flex items-center gap-5 px-3 py-1 rounded-lg flex-grow">
         <div>
-          <BiSearchAlt2 className="text-panel-header-icon cursor-pointer text-xl " />
+          <BiSearchAlt2 className="text-panel-header-icon cursor-pointer text-xl shadow-lg shadow-cyan-500/50 ransition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110  duration-300" />
         </div>
         <div>
           <input
