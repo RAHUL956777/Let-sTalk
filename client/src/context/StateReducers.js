@@ -3,6 +3,7 @@ import { reducerCases } from "./constants";
 export const initialState = {
   userInfo: undefined,
   newUser: false,
+  contactsPage: false,
 };
 
 const reducer = (state, action) => {
