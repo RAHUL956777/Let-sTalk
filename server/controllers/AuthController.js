@@ -52,14 +52,15 @@ export const getAllUsers = async (req, res, next) => {
         about: true,
       },
     });
+
     const userGroupByInitialLetter = {};
 
     users.forEach((user) => {
       const initialLetter = user.name.charAt(0).toUpperCase();
 
-      if (!userGroupByInitialLetter[initialLetter]) {
-        userGroupByInitialLetter[initialLetter] = [];
-      }
+      userGroupByInitialLetter[initialLetter] =
+        userGroupByInitialLetter[initialLetter] || [];
+
       userGroupByInitialLetter[initialLetter].push(user);
     });
 

@@ -23,4 +23,8 @@ model Messages {
   senderId   String @db.ObjectId
   receiver   User   @relation("receivedMessage", fields: [receiverId], references: [id])
   receiverId String @db.ObjectId
+  type String @default("text")
+  message String
+  messageStatus String @default("send")
+  createdAt DateTime @default(now())
 }
