@@ -7,7 +7,7 @@
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb{
-    background: linear-gradient(transparent,#30ff00);
+    background: linear-gradient(transparent,#07e576);
     border-radius: 10px;
 }
 
