@@ -17,4 +17,4 @@ const server = app.listen(process.env.PORT, () => {
   console.log(`Server Started Sucessfully on ${process.env.PORT}`);
 });
 
-global.onlineUser = new Map();
+global.onlineUsers = new Map();

@@ -51,17 +51,17 @@ function Main() {
     }
   });
 
-  useEffect(() => {
-    const getMessages = async () => {
-      const { data } = await axios.get(
-        `${GET_MESSAGES_ROUTE}/${userInfo?.id}/${currentChatUser?.id}`
-      );
-      if (currentChatUser?.id) {
-        console.log({ data });
-      }
-    };
-    getMessages();
-  }, [currentChatUser]);
+  // useEffect(() => {
+  //   const getMessages = async () => {
+  //     const { data } = await axios.get(
+  //       `${GET_MESSAGES_ROUTE}/${userInfo?.id}/${currentChatUser?.id}`
+  //     );
+  //     if (currentChatUser?.id) {
+  //       console.log({ data });
+  //     }
+  //   };
+  //   getMessages();
+  // }, [currentChatUser]);
 
   return (
     <>
