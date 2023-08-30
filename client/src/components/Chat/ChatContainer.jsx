@@ -37,7 +37,7 @@ function ChatContainer() {
                       <span>
                         {message.senderId === userInfo.id && (
                           <MessageStatus
-                            messageStatus={message.MessageStatus}
+                            messageStatus={message.messageStatus}
                           />
                         )}
                       </span>
