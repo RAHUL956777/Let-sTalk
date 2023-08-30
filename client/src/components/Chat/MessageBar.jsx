@@ -6,6 +6,7 @@ import { ImAttachment } from "react-icons/im";
 import { useStateProvider } from "@/context/StateContext";
 import { ADD_MESSAGE_ROUTE } from "@/utils/ApiRoutes";
 import axios from "axios";
+import { reducerCases } from "@/context/constants";
 
 function MessageBar() {
   const [{ userInfo, currentChatUser, socket }, dispatch] = useStateProvider();
@@ -23,6 +24,13 @@ function MessageBar() {
         to: currentChatUser?.id,
         from: userInfo?.id,
         message: data.message,
+      });
+      dispatch({
+        type: reducerCases.ADD_MESSAGE,
+        newMessage: {
+          ...data.message,
+        },
+        fromSelf:true,
       });
       setMessage("");
     } catch (error) {
