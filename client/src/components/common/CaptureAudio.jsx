@@ -1,11 +1,19 @@
 import { useStateProvider } from "@/context/StateContext";
+import { ADD_AUDIO_MESSAGE } from "@/utils/ApiRoutes";
+import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
-import { FaMicrophone, FaPauseCircle, FaPlay, FaStop, FaTrash } from "react-icons/fa";
+import {
+  FaMicrophone,
+  FaPauseCircle,
+  FaPlay,
+  FaStop,
+  FaTrash,
+} from "react-icons/fa";
 import { MdSend } from "react-icons/md";
 import WaveSurfer from "wavesurfer.js";
 
 function CaptureAudio({ hide }) {
-  const [{ userInfo, currentChatUser, socket }, dispacth] = useStateProvider();
+  const [{ userInfo, currentChatUser, socket }, dispatch] = useStateProvider();
 
   const [isRecording, setIsRecording] = useState(false);
   const [recorderAudio, setRecorderAudio] = useState(null);
@@ -66,6 +74,7 @@ function CaptureAudio({ hide }) {
     setCurrentPlaybackTime(0);
     setTotalDuration(0);
     setIsRecording(true);
+    setRecorderAudio(null);
     navigator.mediaDevices
       .getUserMedia({ audio: true })
       .then((stream) => {
@@ -134,7 +143,37 @@ function CaptureAudio({ hide }) {
     setIsplaying(false);
   };
 
-  const sendRecording = async () => {};
+  const sendRecording = async () => {
+    try {
+      const fromData = new FormData();
+      fromData.append("audio", renderedAudio);
+      const responce = await axios.post(ADD_AUDIO_MESSAGE, fromData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        params: {
+          from: userInfo.id,
+          to: currentChatUser.id,
+        },
+      });
+      if (responce.status === 201) {
+        socket.current.emit("send-msg", {
+          to: currentChatUser?.id,
+          from: userInfo?.id,
+          message: responce.data.message,
+        });
+        dispatch({
+          type: reducerCases.ADD_MESSAGE,
+          newMessage: {
+            ...responce.data.message,
+          },
+          fromSelf: true,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const formatTime = (time) => {
     if (isNaN(time)) return "00:00";
