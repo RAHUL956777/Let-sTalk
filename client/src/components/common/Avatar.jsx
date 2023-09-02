@@ -20,6 +20,7 @@ function Avatar({ type, image, setImage }) {
 
   const showContextMenu = (e) => {
     e.preventDefault();
+    
     setIsContextMenuVisible(true);
     setContextMenuCordinates({ x: e.pageX, y: e.pageY });
   };

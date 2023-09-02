@@ -8,7 +8,7 @@ function ChatContainer() {
   const [{ messages, currentChatUser, userInfo }] = useStateProvider();
 
   return (
-    <div className="h-[80vh] w-full relative flex-grow flex-auto custom-scrollbar">
+    <div className="h-[80vh] w-full relative flex-grow flex-auto custom-scrollbar overflow-auto">
       <div className="bg-chat-background h-full w-full bg-fixed opacity-10 fixed left-0 top-0 z-0"></div>
       <div className="mx-10 my-6 relative bottom-0 z-40 left-0">
         <div className="flex w-full">
@@ -45,9 +45,7 @@ function ChatContainer() {
                     </div>
                   </div>
                 )}
-                {
-                  message.type === "image" && <ImageMessage message={message}/>
-                }
+                {message.type === "image" && <ImageMessage message={message} />}
               </div>
             ))}
           </div>
