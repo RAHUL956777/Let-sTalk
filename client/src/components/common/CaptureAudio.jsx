@@ -1,7 +1,8 @@
 import { useStateProvider } from "@/context/StateContext";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FaMicrophone, FaPauseCircle, FaPlay, FaTrash } from "react-icons/fa";
 import { MdSend } from "react-icons/md";
+import WaveSurfer from "wavesurfer.js";
 
 function CaptureAudio({ hide }) {
   const [{ userInfo, currentChatUser, socket }, dispacth] = useStateProvider();
@@ -13,20 +14,137 @@ function CaptureAudio({ hide }) {
   const [currentPlaybackTime, setCurrentPlaybackTime] = useState(0);
   const [totalDuration, setTotalDuration] = useState(0);
   const [isplaying, setIsplaying] = useState(false);
+  const [rendereAudio, setrendereAudio] = useState(null);
 
   const audioRef = useRef(null);
   const mediaRecorderRef = useRef(null);
   const waveFormRef = useRef(null);
 
-  const handlePlayRecording = () => {};
+  useEffect(() => {
+    let interval;
+    if (isRecording) {
+      interval = setInterval(() => {
+        setRecordingDuration((prevDuration) => {
+          setTotalDuration(prevDuration + 1);
+          return prevDuration + 1;
+        });
+      }, 1000);
+    }
 
-  const handlePauseRecording = () => {};
+    return () => {
+      clearInterval(interval);
+    };
+  }, [isRecording]);
 
-  const handleStartRecording = () => {};
+  useEffect(() => {
+    const wavesurfer = WaveSurfer.create({
+      container: waveFormRef.current,
+      waveColor: "#ccc",
+      progressColor: "#4a9eff",
+      cursorColor: "#7ae3c3",
+      barWidth: 2,
+      height: 30,
+      responsive: true,
+    });
+    setwaveFrom(wavesurfer);
 
-  const handleStopRecording = () => {};
+    wavesurfer.on("finish", () => {
+      setIsplaying(false);
+    });
+
+    return () => {
+      wavesurfer.destroy();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (waveFrom) handleStartRecording();
+  }, [waveFrom]);
+
+  const handleStartRecording = () => {
+    setRecordingDuration(0);
+    setCurrentPlaybackTime(0);
+    setTotalDuration(0);
+    setIsRecording(true);
+    navigator.mediaDevices
+      .getUserMedia({ audio: true })
+      .then((stream) => {
+        const mediaRecorder = new MediaRecorder(stream);
+        mediaRecorderRef.current = mediaRecorder;
+        audioRef.current.srcObject = stream;
+
+        const chunks = [];
+        mediaRecorder.ondataavailable = (e) => chunks.push(e.data);
+        mediaRecorder.onstop = () => {
+          const blob = new Blob(chunks, { type: "audio/ogg; codecs=opus" });
+          const audioURL = URL.createObjectURL(blob);
+          const audio = new Audio(audioURL);
+          setRecorderAudio(audio);
+          waveFrom.load(audioURL);
+        };
+        mediaRecorder.start();
+      })
+      .catch((error) => {
+        console.error("Error accessing microphone", error);
+      });
+  };
+
+  const handleStopRecording = () => {
+    if (mediaRecorderRef.current && isRecording) {
+      mediaRecorderRef.current.stop();
+      setIsRecording(false);
+      waveFrom.stop();
+
+      const audioChunks = [];
+      mediaRecorderRef.current.addEventListener("dataavailable", (event) => {
+        audioChunks.push(event.data);
+      }),
+        mediaRecorderRef.current.addEventListener("stop", () => {
+          const audioBlob = new Blob(audioChunks, { type: "audio/mp3" });
+          const audioFile = new File([audioBlob], "Recording.mp3");
+          setrendereAudio(audioFile);
+        });
+    }
+  };
+
+  useEffect(() => {
+    if (recorderAudio) {
+      const updatePlayBackTime = () => {
+        setCurrentPlaybackTime(recorderAudio.currentTime);
+      };
+      recorderAudio.addEventListener("timeUpdate", updatePlayBackTime);
+      return () => {
+        recorderAudio.removeEventListener("timeUpdate", updatePlayBackTime);
+      };
+    }
+  }, [recorderAudio]);
+
+  const handlePlayRecording = () => {
+    if (recorderAudio) {
+      waveFormRef.stop();
+      waveFrom.play();
+      recorderAudio.play();
+      setIsplaying(true);
+    }
+  };
+
+  const handlePauseRecording = () => {
+    waveFrom.stop();
+    recorderAudio.push();
+    setIsplaying(false);
+  };
 
   const sendRecording = async () => {};
+
+  const formatTime = (time) => {
+    if (isNaN(time)) return "00:00";
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60);
+
+    return `${minutes.toString().padStart(2, "0")} : ${seconds
+      .toString()
+      .padStart(2, "0")}`;
+  };
 
   return (
     <div className="flex text-2xl w-full justify-end items-center">
