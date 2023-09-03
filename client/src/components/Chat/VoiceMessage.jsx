@@ -15,11 +15,11 @@ function VoiceMessage({ message }) {
   const [totalDuration, setTotalDuration] = useState(0);
 
   const waveFormRef = useRef(null);
-  const waveFrom = useRef(null);
+  const waveForm = useRef(null);
 
   useEffect(() => {
-    if (waveFrom.current === null) {
-      waveFrom.current = WaveSurfer.create({
+    if (waveForm.current === null) {
+      waveForm.current = WaveSurfer.create({
         container: waveFormRef.current,
         waveColor: "#ccc",
         progressColor: "#4a9eff",
@@ -29,13 +29,13 @@ function VoiceMessage({ message }) {
         responsive: true,
       });
 
-      waveFrom.current.on("finish", () => {
+      waveForm.current.on("finish", () => {
         setIsPlaying(false);
       });
     }
 
     return () => {
-      waveFrom.current.destroy();
+      waveForm.current.destroy();
     };
   }, []);
 
@@ -43,9 +43,9 @@ function VoiceMessage({ message }) {
     const audioURL = `${HOST}/${message.message}`;
     const audio = new Audio(audioURL);
     setAudioMessage(audio);
-    waveFrom.current.load(audioURL);
-    waveFrom.current.on("ready", () => {
-      setTotalDuration(waveFrom.current.getDuration());
+    waveForm.current?.load(audioURL);
+    waveForm.current?.on("ready", () => {
+      setTotalDuration(waveForm.current.getDuration());
     });
   }, [message.message]);
 
@@ -63,15 +63,15 @@ function VoiceMessage({ message }) {
 
   const handlePlayAudio = () => {
     if (audio) {
-      waveFrom.current.stop();
-      waveFrom.current.play();
+      waveForm.current.stop();
+      waveForm.current.play();
       audioMessage.play();
       setIsPlaying(true);
     }
   };
 
   const handlePauseAudio = () => {
-    waveFrom.current.stop();
+    waveForm.current.stop();
     audioMessage.push();
     setIsPlaying(false);
   };
@@ -111,9 +111,9 @@ function VoiceMessage({ message }) {
             </span>
             <div className="flex gap-1">
               <span>{calculateTime(message.createdAt)}</span>
-              {message.senderId === userInfo.id && (
-                <MessageStatus messageStatus={message.messageStatus} />
-              )}
+              {
+                message.senderId === userInfo.id && <MessageStatus messageStatus={message.message}/>
+              }
             </div>
           </div>
         </div>
