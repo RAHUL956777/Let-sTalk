@@ -7,19 +7,19 @@ import { FaPause, FaPlay } from "react-icons/fa";
 import { calculateTime } from "@/utils/CalculateTime";
 import MessageStatus from "../common/MessageStatus";
 
-function VoiceMessage({ message }) {
+const VoiceMessage = ({ message }) => {
   const [{ currentChatUser, userInfo }] = useStateProvider();
   const [audioMessage, setAudioMessage] = useState(null);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isplaying, setIsplaying] = useState(false);
   const [currentPlaybackTime, setCurrentPlaybackTime] = useState(0);
   const [totalDuration, setTotalDuration] = useState(0);
 
   const waveFormRef = useRef(null);
-  const waveForm = useRef(null);
+  const waveform = useRef(null);
 
   useEffect(() => {
-    if (waveForm.current === null) {
-      waveForm.current = WaveSurfer.create({
+    if (waveform.current === null) {
+      waveform.current = WaveSurfer.create({
         container: waveFormRef.current,
         waveColor: "#ccc",
         progressColor: "#4a9eff",
@@ -29,13 +29,13 @@ function VoiceMessage({ message }) {
         responsive: true,
       });
 
-      waveForm.current.on("finish", () => {
-        setIsPlaying(false);
+      waveform.current.on("finish", () => {
+        setIsplaying(false);
       });
     }
 
     return () => {
-      waveForm.current.destroy();
+      waveform.current.destroy();
     };
   }, []);
 
@@ -43,10 +43,13 @@ function VoiceMessage({ message }) {
     const audioURL = `${HOST}/${message.message}`;
     const audio = new Audio(audioURL);
     setAudioMessage(audio);
-    waveForm.current?.load(audioURL);
-    waveForm.current?.on("ready", () => {
-      setTotalDuration(waveForm.current.getDuration());
-    });
+
+    if (waveform?.current) {
+      waveform.current.load(audioURL);
+      waveform.current.on("ready", () => {
+        setTotalDuration(waveform.current.getDuration());
+      });
+    }
   }, [message.message]);
 
   useEffect(() => {
@@ -61,21 +64,6 @@ function VoiceMessage({ message }) {
     }
   }, [audioMessage]);
 
-  const handlePlayAudio = () => {
-    if (audio) {
-      waveForm.current.stop();
-      waveForm.current.play();
-      audioMessage.play();
-      setIsPlaying(true);
-    }
-  };
-
-  const handlePauseAudio = () => {
-    waveForm.current.stop();
-    audioMessage.push();
-    setIsPlaying(false);
-  };
-
   const formatTime = (time) => {
     if (isNaN(time)) return "00:00";
     const minutes = Math.floor(time / 60);
@@ -86,9 +74,24 @@ function VoiceMessage({ message }) {
       .padStart(2, "0")}`;
   };
 
+  const handlePlayAudio = () => {
+    if (audioMessage) {
+      waveform.current.stop();
+      waveform.current.play();
+      audioMessage.play();
+      setIsplaying(true);
+    }
+  };
+
+  const handlePauseAudio = () => {
+    waveform.current.stop();
+    audioMessage.pause();
+    setIsplaying(false);
+  };
+
   return (
     <div
-      className={`flex items-center gap-5 text-white px-4 text-sm rounded-md ${
+      className={`flex items-center gap-5 text-white px-4 pr-2 py-4 text-sm rounded-md  ${
         message.senderId === currentChatUser.id
           ? "bg-incoming-background"
           : "bg-outgoing-background"
@@ -97,7 +100,7 @@ function VoiceMessage({ message }) {
       <div>
         <Avatar type="lg" image={currentChatUser?.profilePicture} />
         <div className="cursor-pointer text-xl">
-          {!isPlaying ? (
+          {!isplaying ? (
             <FaPlay onClick={handlePlayAudio} />
           ) : (
             <FaPause onClick={handlePauseAudio} />
@@ -107,19 +110,19 @@ function VoiceMessage({ message }) {
           <div className="w-60" ref={waveFormRef} />
           <div className="text-bubble-meta text-[11px] pt-1 flex justify-between absolute bottom-[-22px] w-full">
             <span>
-              {formatTime(isPlaying ? currentPlaybackTime : totalDuration)}
+              {formatTime(isplaying ? currentPlaybackTime : totalDuration)}
             </span>
-            <div className="flex gap-1">
+            <div className="flex gap1">
               <span>{calculateTime(message.createdAt)}</span>
-              {
-                message.senderId === userInfo.id && <MessageStatus messageStatus={message.message}/>
-              }
+              {message.senderId === userInfo.id && (
+                <MessageStatus messageStatus={message.message} />
+              )}
             </div>
           </div>
         </div>
       </div>
     </div>
   );
-}
+};
 
 export default VoiceMessage;

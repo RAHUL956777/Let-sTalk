@@ -140,7 +140,7 @@ function CaptureAudio({ hide }) {
 
   const handlePauseRecording = () => {
     waveFrom.stop();
-    recorderAudio.push();
+    recorderAudio.pause();
     setIsplaying(false);
   };
 
