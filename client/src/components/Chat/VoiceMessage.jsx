@@ -15,11 +15,11 @@ const VoiceMessage = ({ message }) => {
   const [totalDuration, setTotalDuration] = useState(0);
 
   const waveFormRef = useRef(null);
-  const waveform = useRef(null);
+  const waveFrom = useRef(null);
 
   useEffect(() => {
-    if (waveform.current === null) {
-      waveform.current = WaveSurfer.create({
+    if (waveFrom.current === null) {
+      waveFrom.current = WaveSurfer.create({
         container: waveFormRef.current,
         waveColor: "#ccc",
         progressColor: "#4a9eff",
@@ -28,14 +28,13 @@ const VoiceMessage = ({ message }) => {
         height: 30,
         responsive: true,
       });
-
-      waveform.current.on("finish", () => {
+      waveFrom.current.on("finish", () => {
         setIsplaying(false);
       });
     }
 
     return () => {
-      waveform.current.destroy();
+      waveFrom.current.destroy();
     };
   }, []);
 
@@ -43,13 +42,14 @@ const VoiceMessage = ({ message }) => {
     const audioURL = `${HOST}/${message.message}`;
     const audio = new Audio(audioURL);
     setAudioMessage(audio);
-
-    if (waveform?.current) {
-      waveform.current.load(audioURL);
-      waveform.current.on("ready", () => {
-        setTotalDuration(waveform.current.getDuration());
-      });
+    if (waveFrom.current && waveFrom.current.isReady) {
+      waveFrom.current.load(audioURL);
+    } else {
+      console.error("WaveSurfer is not ready to load audio.");
     }
+    waveFrom.current.on("ready", () => {
+      setTotalDuration(waveFrom.current.getDuration());
+    });
   }, [message.message]);
 
   useEffect(() => {
@@ -57,9 +57,9 @@ const VoiceMessage = ({ message }) => {
       const updatePlayBackTime = () => {
         setCurrentPlaybackTime(audioMessage.currentTime);
       };
-      audioMessage.addEventListener("timeUpdate", updatePlayBackTime);
+      audioMessage.addEventListener("timeupdate", updatePlayBackTime);
       return () => {
-        audioMessage.removeEventListener("timeUpdate", updatePlayBackTime);
+        audioMessage.removeEventListener("timeupdate", updatePlayBackTime);
       };
     }
   }, [audioMessage]);
@@ -76,15 +76,15 @@ const VoiceMessage = ({ message }) => {
 
   const handlePlayAudio = () => {
     if (audioMessage) {
-      waveform.current.stop();
-      waveform.current.play();
+      waveFrom.current.stop();
+      waveFrom.current.play();
       audioMessage.play();
       setIsplaying(true);
     }
   };
 
   const handlePauseAudio = () => {
-    waveform.current.stop();
+    waveFrom.current.stop();
     audioMessage.pause();
     setIsplaying(false);
   };
@@ -99,25 +99,25 @@ const VoiceMessage = ({ message }) => {
     >
       <div>
         <Avatar type="lg" image={currentChatUser?.profilePicture} />
-        <div className="cursor-pointer text-xl">
-          {!isplaying ? (
-            <FaPlay onClick={handlePlayAudio} />
-          ) : (
-            <FaPause onClick={handlePauseAudio} />
-          )}
-        </div>
-        <div className="relative">
-          <div className="w-60" ref={waveFormRef} />
-          <div className="text-bubble-meta text-[11px] pt-1 flex justify-between absolute bottom-[-22px] w-full">
-            <span>
-              {formatTime(isplaying ? currentPlaybackTime : totalDuration)}
-            </span>
-            <div className="flex gap1">
-              <span>{calculateTime(message.createdAt)}</span>
-              {message.senderId === userInfo.id && (
-                <MessageStatus messageStatus={message.message} />
-              )}
-            </div>
+      </div>
+      <div className="cursor-pointer text-xl">
+        {!isplaying ? (
+          <FaPlay onClick={handlePlayAudio} />
+        ) : (
+          <FaPause onClick={handlePauseAudio} />
+        )}
+      </div>
+      <div className="relative">
+        <div className="w-60" ref={waveFormRef} />
+        <div className="text-bubble-meta text-[11px] pt-1 flex justify-between absolute bottom-[-22px] w-full">
+          <span>
+            {formatTime(isplaying ? currentPlaybackTime : totalDuration)}
+          </span>
+          <div className="flex gap1">
+            <span>{calculateTime(message.createdAt)}</span>
+            {message.senderId === userInfo.id && (
+              <MessageStatus messageStatus={message.messageStatus} />
+            )}
           </div>
         </div>
       </div>
