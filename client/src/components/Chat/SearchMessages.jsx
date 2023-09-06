@@ -1,6 +1,7 @@
 import { useStateProvider } from "@/context/StateContext";
 import { reducerCases } from "@/context/constants";
-import React, { useState } from "react";
+import { calculateTime } from "@/utils/CalculateTime";
+import React, { useEffect, useState } from "react";
 import { BiSearchAlt2 } from "react-icons/bi";
 import { IoClose } from "react-icons/io5";
 
@@ -8,6 +9,20 @@ function SearchMessages() {
   const [{ currentChatUser, messages }, dispacth] = useStateProvider();
   const [searchTerm, setSearchTerm] = useState("");
   const [searchedMessages, setSearchedMessages] = useState([]);
+
+  useEffect(() => {
+    if (searchTerm) {
+      setSearchedMessages(
+        messages.filter(
+          (message) =>
+            message.type === "text" && message.message.includes(searchTerm)
+        )
+      );
+    } else {
+      setSearchedMessages([]);
+      console.warn("message not found !!");
+    }
+  }, [searchTerm]);
 
   return (
     <div className="border-conversation-border border-l w-full bg-conversation-panel-background flex flex-col z-10 max-h-screen">
@@ -42,11 +57,21 @@ function SearchMessages() {
           </span>
         </div>
         <div className="flex justify-center h-full flex-col">
-          {searchTerm.length > 0 && !searchedMessages.length && (
+          {searchTerm?.length > 0 && !searchedMessages?.length && (
             <span className="text-secondary w-full flex justify-center">
               No messages found
             </span>
           )}
+          <div className="flex flex-col w-full h-full">
+            {searchedMessages.map((message) => (
+              <div className="flex cursor-pointer flex-col justify-center hover:bg-background-default-hover w-full px-5 border-b-[0.1px] border-secondary py-5">
+                <div className="text-sm text-secondary">
+                  {calculateTime(message.createdAt)}
+                </div>
+                <div className="text-icon-green">{message.message}</div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
