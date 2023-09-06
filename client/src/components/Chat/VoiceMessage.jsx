@@ -33,9 +33,9 @@ const VoiceMessage = ({ message }) => {
       });
     }
 
-    return () => {
-      waveFrom.current.destroy();
-    };
+    // return () => {
+    //   waveFrom.current.destroy();
+    // };
   }, []);
 
   useEffect(() => {
@@ -45,7 +45,7 @@ const VoiceMessage = ({ message }) => {
     if (waveFrom.current && waveFrom.current.isReady) {
       waveFrom.current.load(audioURL);
     } else {
-      console.error("WaveSurfer is not ready to load audio.");
+      console.log("WaveSurfer is not ready to load audio.");
     }
     waveFrom.current.on("ready", () => {
       setTotalDuration(waveFrom.current.getDuration());
@@ -111,7 +111,9 @@ const VoiceMessage = ({ message }) => {
         <div className="w-60" ref={waveFormRef} />
         <div className="text-bubble-meta text-[11px] pt-1 flex justify-between absolute bottom-[-22px] w-full">
           <span>
-            {formatTime(isplaying ? currentPlaybackTime : totalDuration)}
+            {isplaying
+              ? formatTime(currentPlaybackTime)
+              : formatTime(totalDuration)}
           </span>
           <div className="flex gap1">
             <span>{calculateTime(message.createdAt)}</span>
