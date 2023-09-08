@@ -8,6 +8,7 @@ import ChatLIstItem from "./ChatLIstItem";
 function List() {
   const [{ userInfo, userContacts }, dispatch] = useStateProvider();
 
+
   useEffect(() => {
     const getContacts = async () => {
       try {
@@ -17,7 +18,7 @@ function List() {
         dispatch({ type: reducerCases.SET_ONLINE_USERS, onlineUsers });
         dispatch({ type: reducerCases.SET_USER_CONTACTS, userContacts: users });
       } catch (error) {
-        console.log(error);
+        console.log("something getting wrong", error);
       }
     };
     getContacts();

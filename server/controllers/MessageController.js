@@ -132,34 +132,39 @@ export const addAudioMessage = async (req, res, next) => {
 export const getInitialContactswithMessages = async (req, res, next) => {
   try {
     const userId = req.params.from;
+    if (!userId) {
+      return res.status(400).json({ error: "Missing user ID" });
+    }
+    console.log("user id is: ",userId)
     const prisma = getPrismaInstance();
     const user = await prisma.user.findUnique({
       where: { id: userId },
-      sentMessages: {
-        include: {
-          reciever: true,
-          sender: true,
+      include: {
+        sentMessage: {
+          include: { receiver: true, sender: true },
+          orderBy: {
+            createdAt: "desc",
+          },
         },
-        orderBy: {
-          createdAt: "desc",
+        receivedMessage: {
+          include: {
+            receiver: true,
+            sender: true,
+          },
+          orderBy: {
+            createdAt: "desc",
+          },
         },
       },
-      recievedMessages: {
-        include: {
-          reciever: true,
-          sender: true,
-        },
-        orderBy: {
-          createdAt: "desc",
-        },
-      },
+      
     });
+
     const messages = [...user.sentMessages, ...user.recievedMessages];
     messages.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
     const users = new Map();
     const messageStatusChange = [];
     messages.forEach((msg) => {
-      const isSender = msg.senderId == userId;
+      const isSender = msg.senderId === userId;
       const calculatedId = isSender ? msg.receiverId : msg.senderId;
       if (msg.messageStatus === "sent") {
         messageStatusChange.push(msg.id);
@@ -194,7 +199,7 @@ export const getInitialContactswithMessages = async (req, res, next) => {
             totalUnreadMessages: messageStatus !== "read" ? 1 : 0,
           };
         }
-        user.set(calculatedId, { ...user });
+        users.set(calculatedId, { ...user });
       } else if (messageStatus !== "read" && !isSender) {
         const user = users.get(calculatedId);
         user.set(calculatedId, {

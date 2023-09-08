@@ -13,19 +13,18 @@ model User {
   name            String
   profilePicture  String     @default("")
   about           String     @default("")
-  sendMessage     Messages[] @relation("sendMessage")
+  sentMessage     Messages[] @relation("sentMessage")
   receivedMessage Messages[] @relation("receivedMessage")
 }
 
 model Messages {
-  id         String @id @default(auto()) @map("_id") @db.ObjectId
-  sender     User   @relation("sendMessage", fields: [senderId], references: [id])
-  senderId   String @db.ObjectId
-  receiver   User   @relation("receivedMessage", fields: [receiverId], references: [id])
-  receiverId String @db.ObjectId
-  type String @default("text")
-  message String
-  messageStatus String @default("send")
-  createdAt DateTime @default(now())
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  sender        User     @relation("sentMessage", fields: [senderId], references: [id])
+  senderId      String   @db.ObjectId
+  receiver      User     @relation("receivedMessage", fields: [receiverId], references: [id])
+  receiverId    String   @db.ObjectId
+  type          String   @default("text")
+  message       String
+  messageStatus String   @default("send")
+  createdAt     DateTime @default(now())
 }
-
